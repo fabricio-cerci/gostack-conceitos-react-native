@@ -21,7 +21,20 @@ export default function App() {
   }, []);
 
   async function handleLikeRepository(id) {
-    // Implement "Like Repository" functionality
+    const response = await api.post(`/repositories/${id}/like`);
+    const likedRepository = response.data;
+    
+    const repositoriesUpdated = repositories.map(repository => {
+      if(repository.id === id){
+        return likedRepository;
+      }else{
+        return repository;
+      }
+    });
+    
+    console.log(repositoriesUpdated);
+
+    setRepository(repositoriesUpdated);
   }
 
   return (
@@ -37,7 +50,7 @@ export default function App() {
 
               <View style={styles.techsContainer}>
                 {repository.techs.map(tech => (
-                  <Text style={styles.tech}>
+                  <Text style={styles.tech} key={tech}>
                     {tech}
                   </Text>
                 ))}
